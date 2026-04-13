@@ -1,0 +1,142 @@
+.exp-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.exp-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.exp-summary-card {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exp-summary-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.exp-summary-card--revenue .exp-summary-icon { background: #EFF6FF; color: #2563EB; }
+.exp-summary-card--expense .exp-summary-icon { background: #FEF3C7; color: #D97706; }
+.exp-summary-card--profit .exp-summary-icon { background: #F0FDF4; color: #16A34A; }
+
+.exp-summary-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.exp-summary-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.exp-summary-trend {
+  font-size: 0.75rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.exp-summary-trend--bad { color: var(--danger); }
+
+/* AI Alert */
+.exp-ai-alert {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-left: 4px solid #D97706;
+}
+
+.exp-ai-icon { color: #D97706; flex-shrink: 0; }
+
+.exp-ai-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 3px;
+}
+
+.exp-ai-text {
+  font-size: 0.8125rem;
+  color: #78350F;
+  line-height: 1.5;
+}
+
+/* Charts */
+.exp-charts {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 16px;
+}
+
+.exp-chart-card { padding: 20px; }
+
+.exp-chart-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* Breakdown list */
+.exp-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.exp-breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.exp-breakdown-item--alert {
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+}
+
+.exp-breakdown-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.exp-breakdown-label {
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.exp-breakdown-amount {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
