@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  LayoutDashboard, Users, Package, Megaphone, BarChart2,
+  LayoutDashboard, Boxes, BarChart2,
   Settings, ChevronLeft, ChevronRight, Zap,
-  HelpCircle, DollarSign, Truck, ReceiptText
+  HelpCircle, DollarSign, Truck, CalendarRange, Megaphone
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -17,14 +17,16 @@ export default function Sidebar({ onToast, business }) {
   const basePath = business?.slug ? `/${business.slug}` : '';
   const displayName = business?.businessName || 'Sharma General Store';
 
-  const navItems = [
+  const mainMenuItems = [
     { label: "Dashboard", icon: LayoutDashboard, path: `${basePath}/dashboard` },
-    { label: "AI Assistant", icon: Users, path: `${basePath}/chatbot` },
-    { label: "Inventory", icon: Package, path: `${basePath}/inventory` },
-    { label: "Marketing AI", icon: Megaphone, path: `${basePath}/marketing` },
-    { label: "Billing", icon: ReceiptText, path: `${basePath}/billing` },
-    { label: "Suppliers", icon: Truck, path: `${basePath}/suppliers` },
+    { label: "Operations", icon: Boxes, path: `${basePath}/operations` },
     { label: "Expenses", icon: DollarSign, path: `${basePath}/expenses` },
+    { label: "Suppliers", icon: Truck, path: `${basePath}/suppliers` },
+  ];
+
+  const growUpItems = [
+    { label: "Seasonal Trends", icon: CalendarRange, path: `${basePath}/seasonal-trends` },
+    { label: "Marketing AI", icon: Megaphone, path: `${basePath}/marketing` },
     { label: "Reports", icon: BarChart2, path: `${basePath}/reports` },
   ];
 
@@ -69,7 +71,24 @@ export default function Sidebar({ onToast, business }) {
       <nav className="sidebar__nav">
         <div className="sidebar__nav-group">
           {!collapsed && <p className="sidebar__nav-label">Main Menu</p>}
-          {navItems.map((item) => (
+          {mainMenuItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `sidebar__nav-item ${isActive ? 'sidebar__nav-item--active' : ''}`
+              }
+              title={collapsed ? item.label : undefined}
+            >
+              <item.icon size={18} className="sidebar__nav-icon" />
+              {!collapsed && <span>{item.label}</span>}
+            </NavLink>
+          ))}
+        </div>
+
+        <div className="sidebar__nav-group">
+          {!collapsed && <p className="sidebar__nav-label">Grow Up</p>}
+          {growUpItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}

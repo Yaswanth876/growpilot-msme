@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar';
 import ToastContainer from './components/ui/ToastContainer';
+import GlobalAIAssistant from './components/ui/GlobalAIAssistant';
 import { useToast } from './utils/helpers';
 
 import LandingPage from './pages/LandingPage';
@@ -11,13 +12,12 @@ import BusinessSelectionPage from './pages/BusinessSelectionPage';
 import { bakeryProfile, groceryProfile } from './data/businessProfiles';
 import OnboardingPage from './pages/OnboardingPage';
 import DashboardPage from './pages/DashboardPage';
-import ChatbotPage from './pages/ChatbotPage';
-import InventoryPage from './pages/InventoryPage';
-import MarketingPage from './pages/MarketingPage';
-import BillingPage from './pages/BillingPage';
+import OperationsPage from './pages/OperationsPage';
 import ExpensesPage from './pages/ExpensesPage';
 import ReportsPage from './pages/ReportsPage';
 import SuppliersPage from './pages/SuppliersPage';
+import MarketingPage from './pages/MarketingPage';
+import SeasonalTrendsPage from './pages/SeasonalTrendsPage';
 
 const USER_KEY = 'growpilot.demo.user';
 const BUSINESS_KEY = 'growpilot.demo.business';
@@ -43,11 +43,10 @@ function saveStoredState(key, value) {
 
 const sectionRoutes = {
   dashboard: DashboardPage,
-  chatbot: ChatbotPage,
-  inventory: InventoryPage,
-  marketing: MarketingPage,
-  billing: BillingPage,
+  operations: OperationsPage,
   expenses: ExpensesPage,
+  marketing: MarketingPage,
+  seasonalTrends: SeasonalTrendsPage,
   reports: ReportsPage,
   suppliers: SuppliersPage,
 };
@@ -60,6 +59,7 @@ function AppShell({ children, onToast, business }) {
       <Sidebar onToast={onToast} business={business} />
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {children}
+        <GlobalAIAssistant business={business} />
       </div>
     </div>
   );
@@ -92,7 +92,11 @@ export default function App() {
   const handleLogout = () => {
     saveStoredState(USER_KEY, null);
     saveStoredState(BUSINESS_KEY, null);
+    saveStoredState(ONBOARDING_KEY, null);
+    saveStoredState(ASSESSMENT_KEY, null);
     setSession({ user: null, business: null });
+    setOnboardingState({});
+    setAssessmentState({});
     addToast('Signed out of demo workspace', 'info');
   };
 
@@ -175,11 +179,15 @@ export default function App() {
         <Route
           path="/first-login-assessment"
           element={
-            <FirstLoginAssessmentPage
-              user={assessmentPreviewUser}
-              onComplete={handleCompleteAssessment}
-              onToast={addToast}
-            />
+            session.user ? (
+              <FirstLoginAssessmentPage
+                user={assessmentPreviewUser}
+                onComplete={handleCompleteAssessment}
+                onToast={addToast}
+              />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
         <Route
@@ -236,24 +244,20 @@ export default function App() {
               element={session.user ? renderBusinessRoute(profile, 'dashboard') : <Navigate to="/login" replace />}
             />
             <Route
-              path={`/${profile.slug}/chatbot`}
-              element={session.user ? renderBusinessRoute(profile, 'chatbot') : <Navigate to="/login" replace />}
-            />
-            <Route
-              path={`/${profile.slug}/inventory`}
-              element={session.user ? renderBusinessRoute(profile, 'inventory') : <Navigate to="/login" replace />}
-            />
-            <Route
-              path={`/${profile.slug}/marketing`}
-              element={session.user ? renderBusinessRoute(profile, 'marketing') : <Navigate to="/login" replace />}
-            />
-            <Route
-              path={`/${profile.slug}/billing`}
-              element={session.user ? renderBusinessRoute(profile, 'billing') : <Navigate to="/login" replace />}
+              path={`/${profile.slug}/operations`}
+              element={session.user ? renderBusinessRoute(profile, 'operations') : <Navigate to="/login" replace />}
             />
             <Route
               path={`/${profile.slug}/expenses`}
               element={session.user ? renderBusinessRoute(profile, 'expenses') : <Navigate to="/login" replace />}
+            />
+            <Route
+              path={`/${profile.slug}/seasonal-trends`}
+              element={session.user ? renderBusinessRoute(profile, 'seasonalTrends') : <Navigate to="/login" replace />}
+            />
+            <Route
+              path={`/${profile.slug}/marketing`}
+              element={session.user ? renderBusinessRoute(profile, 'marketing') : <Navigate to="/login" replace />}
             />
             <Route
               path={`/${profile.slug}/reports`}
@@ -268,13 +272,17 @@ export default function App() {
 
         {/* Backward-compatible redirect into the new flow */}
         <Route path="/dashboard" element={<Navigate to={getSelectedBusinessPath('dashboard')} replace />} />
-        <Route path="/chatbot" element={<Navigate to={getSelectedBusinessPath('chatbot')} replace />} />
-        <Route path="/inventory" element={<Navigate to={getSelectedBusinessPath('inventory')} replace />} />
-        <Route path="/marketing" element={<Navigate to={getSelectedBusinessPath('marketing')} replace />} />
-        <Route path="/billing" element={<Navigate to={getSelectedBusinessPath('billing')} replace />} />
+        <Route path="/operations" element={<Navigate to={getSelectedBusinessPath('operations')} replace />} />
         <Route path="/expenses" element={<Navigate to={getSelectedBusinessPath('expenses')} replace />} />
+        <Route path="/seasonal-trends" element={<Navigate to={getSelectedBusinessPath('seasonal-trends')} replace />} />
+        <Route path="/marketing" element={<Navigate to={getSelectedBusinessPath('marketing')} replace />} />
         <Route path="/reports" element={<Navigate to={getSelectedBusinessPath('reports')} replace />} />
         <Route path="/suppliers" element={<Navigate to={getSelectedBusinessPath('suppliers')} replace />} />
+
+        {/* Legacy routes retained for compatibility */}
+        <Route path="/chatbot" element={<Navigate to={getSelectedBusinessPath('dashboard')} replace />} />
+        <Route path="/inventory" element={<Navigate to={getSelectedBusinessPath('operations')} replace />} />
+        <Route path="/billing" element={<Navigate to={getSelectedBusinessPath('operations')} replace />} />
 
         {/* Catch-all → landing */}
         <Route path="*" element={<Navigate to="/" replace />} />

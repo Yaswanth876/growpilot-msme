@@ -32,7 +32,6 @@ export default function ChatbotPage({ business }) {
 
     const reply = await sendChatMessage(newHistory, {
       systemPrompt: chatbotData.systemPrompt,
-      fallback: chatbotData.initialMessage.content,
     });
     const botMsg = { id: `bot-${messageIdRef.current++}`, role: 'assistant', content: reply, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
 

@@ -1,11 +1,9 @@
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  AreaChart, Area
 } from 'recharts';
 import {
   IndianRupee, ShoppingBag, AlertTriangle, MessageSquare,
-  TrendingUp, TrendingDown, Lightbulb, AlertCircle, Info, CheckCircle,
-  ArrowRight, RefreshCw
+  Lightbulb, AlertCircle, Info, CheckCircle, ArrowRight, RefreshCw,
 } from 'lucide-react';
 import Topbar from '../components/layout/Topbar';
 import { kpiData, weeklyData, aiInsights, recentOrders } from '../data/mockData';
@@ -55,7 +53,17 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function DashboardPage({ business }) {
-  const dashboardData = business?.workspace?.dashboard || { kpiData, weeklyData, aiInsights, recentOrders, supplierInsights: [], supplierSnapshot: [], title: 'Owner Dashboard', subtitle: 'Welcome back, Rajesh! Here\'s your business summary.' };
+  const dashboardData = business?.workspace?.dashboard || {
+    kpiData,
+    weeklyData,
+    aiInsights,
+    recentOrders,
+    supplierInsights: [],
+    supplierSnapshot: [],
+    title: 'Owner Dashboard',
+    subtitle: 'Welcome back, Rajesh! Here\'s your business summary.',
+  };
+
   const weeklyTotal = dashboardData.weeklyData.reduce((sum, day) => sum + (day.sales || 0), 0);
 
   return (
@@ -63,7 +71,6 @@ export default function DashboardPage({ business }) {
       <Topbar title={dashboardData.title} subtitle={dashboardData.subtitle} />
       <div className="dash-content animate-fade-in">
 
-        {/* KPI Cards */}
         <div className="dash-kpis">
           {dashboardData.kpiData.map((kpi, i) => {
             const Icon = iconMap[kpi.icon];
@@ -84,9 +91,7 @@ export default function DashboardPage({ business }) {
           })}
         </div>
 
-        {/* Chart + Insights Row */}
         <div className="dash-row">
-          {/* Chart */}
           <div className="dash-chart card">
             <div className="dash-card-header">
               <div>
@@ -115,7 +120,6 @@ export default function DashboardPage({ business }) {
             </ResponsiveContainer>
           </div>
 
-          {/* AI Insights */}
           <div className="dash-insights card">
             <div className="dash-card-header">
               <div>
@@ -144,7 +148,6 @@ export default function DashboardPage({ business }) {
           </div>
         </div>
 
-        {/* Recent Orders */}
         <div className="card">
           <div className="dash-card-header" style={{ padding: '20px 20px 0' }}>
             <div>
@@ -183,7 +186,6 @@ export default function DashboardPage({ business }) {
           </div>
         </div>
 
-        {/* Supplier Insights */}
         {(dashboardData.supplierInsights?.length > 0 || dashboardData.supplierSnapshot?.length > 0) && (
           <div className="dash-row">
             <div className="dash-insights card">
@@ -238,7 +240,6 @@ export default function DashboardPage({ business }) {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

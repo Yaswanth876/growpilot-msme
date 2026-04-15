@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Sparkles, ShieldCheck, Store } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ShieldCheck, Store } from 'lucide-react';
 import './BusinessFlow.css';
 
 const demoEmail = 'owner@growpilot.demo';
@@ -32,27 +32,23 @@ export default function LoginPage({ onLogin, onToast }) {
       <div className="auth-page__shell">
         <section className="auth-page__brand">
           <div className="auth-brand__top">
-            <div className="auth-brand__badge">
-              <Sparkles size={14} />
-              Dummy login for MSME demo
-            </div>
             <h1 className="auth-brand__title">Run your business from one place.</h1>
             <p className="auth-brand__copy">
-              Sign in with a dummy email, choose your business type, and jump into a practical dashboard for bakery or grocery operations.
+              Sign in with your demo email and continue to your business dashboard.
             </p>
 
             <div className="auth-brand__stats">
               <div className="auth-brand__stat">
                 <strong>2</strong>
-                <span>active demo businesses</span>
+                <span>demo businesses</span>
               </div>
               <div className="auth-brand__stat">
                 <strong>8</strong>
-                <span>business categories in flow</span>
+                <span>business categories</span>
               </div>
               <div className="auth-brand__stat">
                 <strong>1</strong>
-                <span>simple email login step</span>
+                <span>quick sign-in step</span>
               </div>
             </div>
           </div>
@@ -60,7 +56,7 @@ export default function LoginPage({ onLogin, onToast }) {
           <div className="auth-brand__footer">
             <div className="auth-note" style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.82)' }}>
               <ShieldCheck size={16} />
-              This demo keeps the login local in the browser. No backend auth, no passwords stored remotely.
+              Login is local to your browser for demo purposes.
             </div>
           </div>
         </section>
@@ -70,7 +66,7 @@ export default function LoginPage({ onLogin, onToast }) {
             <div className="auth-card__header">
               <h2>Sign in with a demo email</h2>
               <p>
-                Use any email address you want for testing. After login, you will pick the business type and continue to the bakery or grocery dashboard.
+                Use any email address to test the product flow.
               </p>
             </div>
 
@@ -98,16 +94,6 @@ export default function LoginPage({ onLogin, onToast }) {
               </div>
 
               <div className="auth-form__row">
-                <button
-                  type="button"
-                  className="btn btn-outline"
-                  onClick={() => {
-                    setEmail(demoEmail);
-                    setPassword('demo123');
-                  }}
-                >
-                  Use dummy email
-                </button>
                 <button type="submit" className="btn btn-primary">
                   Continue
                   <ArrowRight size={16} />
@@ -117,14 +103,14 @@ export default function LoginPage({ onLogin, onToast }) {
 
             <div className="auth-note">
               <CheckCircle2 size={16} />
-              The form is intentionally simple. The email is stored locally so the next page can show your demo session.
+              Session details are stored locally in your browser.
             </div>
 
             <div className="auth-footer">
               <span>Default demo email: {demoEmail}</span>
               <span>
                 <Store size={14} style={{ display: 'inline', marginRight: 6 }} />
-                Built for bakery and grocery flows
+                Bakery and grocery demo flows
               </span>
             </div>
           </div>

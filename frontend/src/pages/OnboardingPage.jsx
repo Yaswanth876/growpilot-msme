@@ -39,8 +39,8 @@ function buildAnnualReport(business, answers, files) {
       ? `- Preferred supplier count: ${supplierList.filter((supplier) => supplier.status === 'preferred').length}.`
       : '- Build a preferred supplier roster for stable procurement.',
     answers.hasData
-      ? '- Uploaded files can be used to calibrate forecasts and cost optimization recommendations.'
-      : '- Add historical invoices and sales sheets to improve AI recommendations.',
+      ? '- Uploaded files are treated as reference inputs in this demo. Insights are generated from your workspace baseline metrics plus file metadata.'
+      : '- Add historical invoices and sales sheets to improve future AI recommendations.',
     '',
     'Recommended Priorities for Next 12 Months',
     '- Improve stock planning by aligning purchase cycles with peak demand windows.',
@@ -111,7 +111,7 @@ export default function OnboardingPage({ business, onComplete, onToast }) {
           <div className="onboarding-header">
             <h1>{summaryTitle}</h1>
             <p>
-              Before opening the dashboard, answer a few setup questions so the assistant can prepare a business-specific starting report.
+              Before opening the dashboard, answer a few setup questions so the assistant can prepare a business-specific starter report.
             </p>
           </div>
 
@@ -140,7 +140,7 @@ export default function OnboardingPage({ business, onComplete, onToast }) {
           </div>
 
           <div className="onboarding-block">
-            <p className="onboarding-label">Do you have data to feed the AI?</p>
+            <p className="onboarding-label">Do you want to attach reference files for setup?</p>
             <div className="onboarding-options">
               <label className="onboarding-option">
                 <input
@@ -152,7 +152,7 @@ export default function OnboardingPage({ business, onComplete, onToast }) {
                     setReport('');
                   }}
                 />
-                Yes, upload my data files
+                Yes, attach my files
               </label>
               <label className="onboarding-option">
                 <input
@@ -165,7 +165,7 @@ export default function OnboardingPage({ business, onComplete, onToast }) {
                     setReport('');
                   }}
                 />
-                No, continue with default setup
+                No, continue with baseline setup
               </label>
             </div>
           </div>
@@ -173,7 +173,7 @@ export default function OnboardingPage({ business, onComplete, onToast }) {
           {hasData && (
             <div className="onboarding-upload card">
               <p className="onboarding-upload-title">
-                <FileUp size={16} /> Upload PDF, Excel, or Text files
+                <FileUp size={16} /> Upload PDF, Excel, or Text files (demo reference)
               </p>
               <input
                 className="input"
@@ -189,8 +189,11 @@ export default function OnboardingPage({ business, onComplete, onToast }) {
                   ))}
                 </ul>
               )}
+              <p className="onboarding-placeholder" style={{ marginTop: 10, marginBottom: 10 }}>
+                Note: this demo uses uploaded file names and workspace metrics to generate a starter summary. It does not parse full file contents yet.
+              </p>
               <button className="btn btn-primary btn-sm" onClick={handleGenerateReport}>
-                <BarChart3 size={14} /> Generate Annual General Report
+                <BarChart3 size={14} /> Generate Starter Annual Report
               </button>
             </div>
           )}
@@ -204,13 +207,13 @@ export default function OnboardingPage({ business, onComplete, onToast }) {
 
         <aside className="onboarding-report card">
           <h2>
-            <Lightbulb size={18} /> AI Annual Report Preview
+            <Lightbulb size={18} /> Annual Report Preview
           </h2>
           {report ? (
             <pre className="onboarding-report-text">{report}</pre>
           ) : (
             <p className="onboarding-placeholder">
-              Upload files and generate report to view annual business insights. If no data is uploaded, the workspace will continue with default assumptions.
+              Attach files and generate a starter report to view annual business insights. Without attachments, the workspace continues with baseline assumptions.
             </p>
           )}
         </aside>

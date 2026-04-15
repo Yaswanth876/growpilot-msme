@@ -42,6 +42,28 @@ const getIntentReply = (userText = '') => {
     'ஆஃபர்கள்',
   ]);
 
+  const breadAvailabilityIntent =
+    includesAny(normalized, ['fresh bread', 'bread']) &&
+    includesAny(normalized, ['available', 'have', 'stock', 'in stock']);
+
+  const cakePriceIntent =
+    includesAny(normalized, ['birthday cake', 'cake']) &&
+    includesAny(normalized, ['how much', 'price', 'cost', 'rate']);
+
+  const muffinPreOrderIntent =
+    includesAny(normalized, ['muffin', 'muffins']) &&
+    includesAny(normalized, ['pre-order', 'preorder', 'order', 'book']);
+
+  const egglessIntent = includesAny(normalized, ['eggless', 'without egg', 'no egg']);
+
+  const specialsIntent = includesAny(normalized, [
+    "today's specials",
+    'todays specials',
+    "today's special",
+    'specials',
+    'today special',
+  ]);
+
   if (riceIntent) {
     return tamil
       ? 'ஆம், அரிசி கிடைக்கும். Rice 5kg பை ஒன்றின் விலை ₹320. தற்போது 5 பைகள் மட்டுமே உள்ளன, எனவே உடனே ஆர்டர் செய்வது நல்லது.'
@@ -70,6 +92,26 @@ const getIntentReply = (userText = '') => {
     return tamil
       ? 'இன்றைய சலுகைகள்: Rice 5kg - ₹320, Cooking Oil 1L - ₹180, Tea Powder 500g - ₹190. புதிய ஆஃபர்கள் வந்தால் உடனே தெரிவிக்கலாம்.'
       : "Today's offers: Rice 5kg at ₹320, Cooking Oil 1L at ₹180, and Tea Powder 500g at ₹190. I can also notify you about new offers anytime.";
+  }
+
+  if (breadAvailabilityIntent) {
+    return 'Yes, fresh bread is available right now. Bread loaf is ₹40, and we baked a fresh batch this morning. Would you like to reserve a few loaves?';
+  }
+
+  if (cakePriceIntent) {
+    return 'Our birthday cake starts at ₹1,200. You can customize flavor, size, and message. Share your preferred pickup date and we can confirm the final quote.';
+  }
+
+  if (muffinPreOrderIntent) {
+    return 'Yes, you can pre-order muffins. Muffins (4-pack) are ₹120, and we can keep them ready for your pickup slot. Please share your name and preferred pickup time.';
+  }
+
+  if (egglessIntent) {
+    return 'Yes, we do have eggless options, including eggless birthday cakes and select muffins. Tell me what you need, and I will confirm availability for today.';
+  }
+
+  if (specialsIntent) {
+    return "Today's bakery specials: Fresh Bread Loaf at ₹40, Buns (6-pack) at ₹55, and Croissants (4-pack) at ₹160. We also have custom cake slots open for evening pickup.";
   }
 
   return null;
@@ -101,6 +143,11 @@ export function useAI() {
     try {
       const latestUserMessage = [...conversationHistory].reverse().find((msg) => msg.role === 'user')?.content || '';
       const intentReply = getIntentReply(latestUserMessage);
+
+      if (intentReply) {
+        await new Promise(r => setTimeout(r, 450));
+        return intentReply;
+      }
 
       if (!ANTHROPIC_API_KEY) {
         // Use fallback for demo without key
