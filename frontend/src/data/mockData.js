@@ -109,6 +109,11 @@ export const quickPrompts = [
   "Do you have cooking oil in stock?",
   "Place an order for wheat flour",
   "What are today's offers?",
+  "அரிசி கிடைக்குமா?",
+  "சர்க்கரையின் விலை என்ன?",
+  "Cooking oil ஸ்டாக்கில் இருக்கா?",
+  "கோதுமை மாவுக்கு ஆர்டர் செய்யவும்",
+  "இன்றைய சலுகைகள் என்ன?",
 ];
 
 // ─── AI System Prompt for Chat ────────────────────────────────────────
@@ -127,7 +132,7 @@ Current inventory:
 - Detergent 1kg: ₹160 (11 units)
 
 Rules:
-- Always respond in the same language the customer uses (Hindi or English)
+- Always respond in the same language the customer uses (Hindi, English, or Tamil)
 - For orders, ask for customer name and delivery address
 - For low stock items, warn customer about limited availability
 - Be warm, friendly, concise, and helpful

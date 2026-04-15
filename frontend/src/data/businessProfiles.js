@@ -302,7 +302,7 @@ export const groceryWorkspace = {
     title: 'AI Customer Assistant',
     subtitle: 'Powered by Claude — answers customer queries 24/7',
     storeContext: 'Sharma General Store, Bangalore',
-    languages: ['English', 'हिंदी'],
+    languages: ['English', 'हिंदी', 'தமிழ்'],
     channels: ['Web Chat', 'WhatsApp Ready'],
     stats: { queriesToday: 8, resolved: 6, averageResponse: '1.2s' },
     quickPrompts: groceryQuickPrompts,
@@ -319,6 +319,32 @@ export const groceryWorkspace = {
     subtitle: 'Generate promotional content for Instagram, WhatsApp & Facebook in seconds',
     presets: groceryMarketingPresets,
     businessName: 'Sharma General Store',
+  },
+  billing: {
+    title: 'Automated Billing',
+    subtitle: 'Generate invoices, run reminders, and track collections automatically',
+    summary: {
+      billsToday: 27,
+      autoPaid: 14,
+      pending: 9,
+      collectionToday: 'Rs 24,860',
+    },
+    automationRules: [
+      { id: 'g-auto-1', label: 'Auto-generate daily invoices at close', enabled: true, schedule: 'Every day • 09:30 PM' },
+      { id: 'g-auto-2', label: 'Auto-send WhatsApp invoice copy', enabled: true, schedule: 'Immediately after invoice' },
+      { id: 'g-auto-3', label: 'Auto reminder for pending payments', enabled: true, schedule: 'Every 24 hrs' },
+    ],
+    scheduledRuns: [
+      { task: 'Daily invoice batch', nextRun: 'Today 09:30 PM', channel: 'System queue', status: 'scheduled' },
+      { task: 'Pending payment reminders', nextRun: 'Today 06:00 PM', channel: 'WhatsApp', status: 'scheduled' },
+      { task: 'Weekly tax export', nextRun: 'Sunday 08:00 PM', channel: 'Email', status: 'scheduled' },
+    ],
+    invoices: [
+      { id: 'INV-GR-2405', customer: 'Ravi Kumar', amount: 784, dueDate: '15 Apr', method: 'UPI', status: 'paid' },
+      { id: 'INV-GR-2406', customer: 'Meena Sharma', amount: 560, dueDate: '16 Apr', method: 'Cash', status: 'pending' },
+      { id: 'INV-GR-2407', customer: 'Arun Patel', amount: 280, dueDate: '16 Apr', method: 'UPI', status: 'pending' },
+      { id: 'INV-GR-2408', customer: 'Sunita Devi', amount: 750, dueDate: '14 Apr', method: 'Bank Transfer', status: 'overdue' },
+    ],
   },
   expenses: {
     title: 'Expense & Profit Tracker',
@@ -395,7 +421,7 @@ export const bakeryWorkspace = {
     title: 'AI Bakery Assistant',
     subtitle: 'Powered by Claude — handles orders and availability 24/7',
     storeContext: 'Sunrise Bakery, Bengaluru',
-    languages: ['English', 'हिंदी'],
+    languages: ['English', 'हिंदी', 'தமிழ்'],
     channels: ['Web Chat', 'WhatsApp Ready'],
     stats: { queriesToday: 12, resolved: 9, averageResponse: '1.1s' },
     quickPrompts: ['Is fresh bread available?', 'How much is a birthday cake?', 'Can I pre-order muffins?', 'Do you have eggless options?', 'What are today\'s specials?'],
@@ -447,6 +473,32 @@ Rules:
       { label: 'Festival Treat', productName: 'Assorted Pastry Pack', offerPercent: '20', occasion: 'Festival Season', platform: 'facebook' },
     ],
     businessName: 'Sunrise Bakery',
+  },
+  billing: {
+    title: 'Bakery Automated Billing',
+    subtitle: 'Run recurring invoices, delivery billing, and payment reminders from one panel',
+    summary: {
+      billsToday: 19,
+      autoPaid: 8,
+      pending: 7,
+      collectionToday: 'Rs 31,420',
+    },
+    automationRules: [
+      { id: 'b-auto-1', label: 'Auto-generate order invoice on dispatch', enabled: true, schedule: 'Real-time' },
+      { id: 'b-auto-2', label: 'Auto-send GST invoice PDF', enabled: true, schedule: 'Within 2 minutes' },
+      { id: 'b-auto-3', label: 'Auto reminder for B2B dues', enabled: false, schedule: 'Every 48 hrs' },
+    ],
+    scheduledRuns: [
+      { task: 'Dispatch invoice sync', nextRun: 'Next order event', channel: 'System queue', status: 'active' },
+      { task: 'B2B due reminders', nextRun: 'Tomorrow 11:00 AM', channel: 'Email + WhatsApp', status: 'paused' },
+      { task: 'Monthly billing export', nextRun: '30 Apr 08:30 PM', channel: 'Drive backup', status: 'scheduled' },
+    ],
+    invoices: [
+      { id: 'INV-BK-2401', customer: 'Ayesha Khan', amount: 2480, dueDate: '15 Apr', method: 'UPI', status: 'paid' },
+      { id: 'INV-BK-2402', customer: 'Kabir Rao', amount: 3900, dueDate: '16 Apr', method: 'Card', status: 'pending' },
+      { id: 'INV-BK-2403', customer: 'Hotel Lotus', amount: 4800, dueDate: '17 Apr', method: 'Bank Transfer', status: 'pending' },
+      { id: 'INV-BK-2404', customer: 'Cafe Nova', amount: 1420, dueDate: '14 Apr', method: 'UPI', status: 'overdue' },
+    ],
   },
   expenses: {
     title: 'Bakery Expense Tracker',

@@ -74,6 +74,7 @@ export default function App() {
   const [onboardingState, setOnboardingState] = useState(() => readStoredState(ONBOARDING_KEY) || {});
   const [assessmentState, setAssessmentState] = useState(() => readStoredState(ASSESSMENT_KEY) || {});
   const hasProfileAssessment = Boolean(session.user?.email && assessmentState[session.user.email]);
+  const assessmentPreviewUser = session.user || { email: 'preview@growpilot.demo', name: 'Preview User' };
 
   const handleLogin = (user) => {
     const nextUser = {
@@ -174,19 +175,11 @@ export default function App() {
         <Route
           path="/first-login-assessment"
           element={
-            session.user ? (
-              hasProfileAssessment ? (
-                <Navigate to="/businesses" replace />
-              ) : (
-                <FirstLoginAssessmentPage
-                  user={session.user}
-                  onComplete={handleCompleteAssessment}
-                  onToast={addToast}
-                />
-              )
-            ) : (
-              <Navigate to="/login" replace />
-            )
+            <FirstLoginAssessmentPage
+              user={assessmentPreviewUser}
+              onComplete={handleCompleteAssessment}
+              onToast={addToast}
+            />
           }
         />
         <Route

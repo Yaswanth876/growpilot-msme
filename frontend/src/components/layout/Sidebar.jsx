@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Package, Megaphone, BarChart2,
   Settings, ChevronLeft, ChevronRight, Zap,
-  HelpCircle, DollarSign, Truck
+  HelpCircle, DollarSign, Truck, ReceiptText
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -22,6 +22,7 @@ export default function Sidebar({ onToast, business }) {
     { label: "AI Assistant", icon: Users, path: `${basePath}/chatbot` },
     { label: "Inventory", icon: Package, path: `${basePath}/inventory` },
     { label: "Marketing AI", icon: Megaphone, path: `${basePath}/marketing` },
+    { label: "Billing", icon: ReceiptText, path: `${basePath}/billing` },
     { label: "Suppliers", icon: Truck, path: `${basePath}/suppliers` },
     { label: "Expenses", icon: DollarSign, path: `${basePath}/expenses` },
     { label: "Reports", icon: BarChart2, path: `${basePath}/reports` },

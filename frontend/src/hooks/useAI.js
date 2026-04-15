@@ -3,6 +3,78 @@ import { chatSystemPrompt } from '../data/mockData';
 
 const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
 
+const isTamilText = (text = '') => /[\u0B80-\u0BFF]/.test(text);
+
+const includesAny = (text, terms) => terms.some((term) => text.includes(term));
+
+const getIntentReply = (userText = '') => {
+  const normalized = userText.trim().toLowerCase();
+  if (!normalized) return null;
+
+  const tamil = isTamilText(normalized);
+
+  const riceIntent =
+    includesAny(normalized, ['rice', 'arisi', 'அரிசி']) &&
+    includesAny(normalized, ['available', 'stock', 'have', 'in stock', 'கிடைக்க', 'இருக்க']);
+
+  const sugarPriceIntent =
+    includesAny(normalized, ['sugar', 'சர்க்கரை']) &&
+    includesAny(normalized, ['price', 'rate', 'cost', 'விலை']);
+
+  const oilStockIntent =
+    includesAny(normalized, ['cooking oil', 'oil', 'எண்ணெய்']) &&
+    includesAny(normalized, ['stock', 'available', 'have', 'in stock', 'கிடைக்க', 'இருக்க']);
+
+  const wheatOrderIntent =
+    includesAny(normalized, ['wheat flour', 'flour', 'atta', 'கோதுமை மாவு', 'ஆட்டா']) &&
+    includesAny(normalized, ['order', 'place an order', 'book', 'ஆர்டர்', 'பதிவு']);
+
+  const offersIntent = includesAny(normalized, [
+    'offer',
+    'offers',
+    'deal',
+    'deals',
+    'today special',
+    'todays offers',
+    'இன்றைய சலுகை',
+    'இன்றைய சலுகைகள்',
+    'ஆஃபர்',
+    'ஆஃபர்கள்',
+  ]);
+
+  if (riceIntent) {
+    return tamil
+      ? 'ஆம், அரிசி கிடைக்கும். Rice 5kg பை ஒன்றின் விலை ₹320. தற்போது 5 பைகள் மட்டுமே உள்ளன, எனவே உடனே ஆர்டர் செய்வது நல்லது.'
+      : 'Yes, rice is available. Rice 5kg is priced at ₹320 per bag. We currently have only 5 bags left, so ordering soon is recommended.';
+  }
+
+  if (sugarPriceIntent) {
+    return tamil
+      ? 'Sugar 1kg விலை ₹48. ஆனால் ஸ்டாக்கில் 2 பாக்கெட் மட்டுமே உள்ளது, விரைவாக ஆர்டர் செய்யவும்.'
+      : 'Sugar 1kg is ₹48. Only 2 packets are left in stock, so please order soon.';
+  }
+
+  if (oilStockIntent) {
+    return tamil
+      ? 'ஆம், Cooking Oil 1L ஸ்டாக்கில் உள்ளது. விலை ₹180, தற்போது 20 பாட்டில்கள் கிடைக்கின்றன.'
+      : 'Yes, Cooking Oil 1L is in stock. The price is ₹180, and 20 bottles are currently available.';
+  }
+
+  if (wheatOrderIntent) {
+    return tamil
+      ? 'கோதுமை மாவு (Wheat Flour 5kg) ஆர்டர் செய்யலாம். ஒரு பையின் விலை ₹280; தற்போது 8 பைகள் உள்ளன. தயவுசெய்து உங்கள் பெயர் மற்றும் டெலிவரி முகவரியை பகிரவும்.'
+      : 'Sure, I can place an order for Wheat Flour 5kg. It costs ₹280 per bag and 8 bags are available. Please share your name and delivery address.';
+  }
+
+  if (offersIntent) {
+    return tamil
+      ? 'இன்றைய சலுகைகள்: Rice 5kg - ₹320, Cooking Oil 1L - ₹180, Tea Powder 500g - ₹190. புதிய ஆஃபர்கள் வந்தால் உடனே தெரிவிக்கலாம்.'
+      : "Today's offers: Rice 5kg at ₹320, Cooking Oil 1L at ₹180, and Tea Powder 500g at ₹190. I can also notify you about new offers anytime.";
+  }
+
+  return null;
+};
+
 // Fallback responses when API key is missing or fails
 const chatFallbacks = [
   "Yes! Cooking Oil 1L is available for ₹180. We have 20 bottles in stock. Would you like to place an order? 🛒",
@@ -27,10 +99,13 @@ export function useAI() {
     setIsLoading(true);
     setError(null);
     try {
+      const latestUserMessage = [...conversationHistory].reverse().find((msg) => msg.role === 'user')?.content || '';
+      const intentReply = getIntentReply(latestUserMessage);
+
       if (!ANTHROPIC_API_KEY) {
         // Use fallback for demo without key
         await new Promise(r => setTimeout(r, 1200));
-        return options.fallback || getFallback();
+        return intentReply || options.fallback || getFallback();
       }
       const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
@@ -53,7 +128,9 @@ export function useAI() {
     } catch (err) {
       setError(err.message);
       await new Promise(r => setTimeout(r, 800));
-      return options.fallback || getFallback();
+      const latestUserMessage = [...conversationHistory].reverse().find((msg) => msg.role === 'user')?.content || '';
+      const intentReply = getIntentReply(latestUserMessage);
+      return intentReply || options.fallback || getFallback();
     } finally {
       setIsLoading(false);
     }

@@ -6,7 +6,7 @@ import { initialMessage, quickPrompts } from '../data/mockData';
 import './ChatbotPage.css';
 
 export default function ChatbotPage({ business }) {
-  const chatbotData = business?.workspace?.chatbot || { title: 'AI Customer Assistant', subtitle: 'Powered by Claude — answers customer queries 24/7', storeContext: 'Sharma General Store, Bangalore', languages: ['English', 'हिंदी'], channels: ['Web Chat', 'WhatsApp Ready'], stats: { queriesToday: 8, resolved: 6, averageResponse: '1.2s' }, quickPrompts, initialMessage, systemPrompt: null };
+  const chatbotData = business?.workspace?.chatbot || { title: 'AI Customer Assistant', subtitle: 'Powered by Claude — answers customer queries 24/7', storeContext: 'Sharma General Store, Bangalore', languages: ['English', 'हिंदी', 'தமிழ்'], channels: ['Web Chat', 'WhatsApp Ready'], stats: { queriesToday: 8, resolved: 6, averageResponse: '1.2s' }, quickPrompts, initialMessage, systemPrompt: null };
   const [messages, setMessages] = useState([chatbotData.initialMessage]);
   const [history, setHistory] = useState([]);
   const [input, setInput] = useState('');
