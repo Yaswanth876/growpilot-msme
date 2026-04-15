@@ -1,0 +1,151 @@
+.onboarding-page {
+  min-height: 100vh;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 32%),
+    radial-gradient(circle at top right, rgba(217, 119, 6, 0.08), transparent 26%),
+    #f8fbff;
+}
+
+.onboarding-shell {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 18px;
+}
+
+.onboarding-panel {
+  padding: 24px;
+}
+
+.onboarding-header h1 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.onboarding-header p {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.onboarding-block {
+  margin-top: 18px;
+}
+
+.onboarding-label {
+  font-size: 0.87rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.onboarding-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.onboarding-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #FAFAFA;
+}
+
+.onboarding-option input {
+  accent-color: var(--primary);
+}
+
+.onboarding-upload {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px dashed #bfdbfe;
+  background: #eff6ff;
+}
+
+.onboarding-upload-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  margin-bottom: 10px;
+}
+
+.onboarding-file-list {
+  margin: 10px 0 12px;
+  padding-left: 18px;
+  color: #334155;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.onboarding-actions {
+  margin-top: 18px;
+}
+
+.onboarding-report {
+  padding: 20px;
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+}
+
+.onboarding-report h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.onboarding-placeholder {
+  margin-top: 12px;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.onboarding-report-text {
+  margin-top: 12px;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+@media (max-width: 1100px) {
+  .onboarding-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .onboarding-report {
+    position: static;
+    max-height: unset;
+  }
+}
+
+@media (max-width: 700px) {
+  .onboarding-page {
+    padding: 14px;
+  }
+
+  .onboarding-panel,
+  .onboarding-report {
+    padding: 16px;
+  }
+}

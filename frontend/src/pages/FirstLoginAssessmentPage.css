@@ -1,0 +1,116 @@
+.first-assessment-page {
+  min-height: 100vh;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.07), transparent 30%),
+    #f8fbff;
+}
+
+.first-assessment-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.first-assessment-header h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.first-assessment-header p {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.first-ai-fill {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px dashed #bfdbfe;
+  background: #eff6ff;
+}
+
+.first-ai-fill__title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
+.first-ai-fill__sub {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: #475569;
+}
+
+.first-ai-fill__controls {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.first-assessment-form {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.first-section {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fbfdff;
+}
+
+.first-section h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.96rem;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.first-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.first-textarea {
+  margin-top: 4px;
+  min-height: 90px;
+  resize: vertical;
+}
+
+.first-assessment-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+@media (max-width: 900px) {
+  .first-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .first-ai-fill__controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .first-assessment-page {
+    padding: 14px;
+  }
+
+  .first-assessment-shell {
+    padding: 16px;
+  }
+}

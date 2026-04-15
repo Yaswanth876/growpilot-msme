@@ -6,8 +6,10 @@ import { useToast } from './utils/helpers';
 
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
+import FirstLoginAssessmentPage from './pages/FirstLoginAssessmentPage';
 import BusinessSelectionPage from './pages/BusinessSelectionPage';
 import { bakeryProfile, groceryProfile } from './data/businessProfiles';
+import OnboardingPage from './pages/OnboardingPage';
 import DashboardPage from './pages/DashboardPage';
 import ChatbotPage from './pages/ChatbotPage';
 import InventoryPage from './pages/InventoryPage';
@@ -18,6 +20,8 @@ import SuppliersPage from './pages/SuppliersPage';
 
 const USER_KEY = 'growpilot.demo.user';
 const BUSINESS_KEY = 'growpilot.demo.business';
+const ONBOARDING_KEY = 'growpilot.demo.onboarding';
+const ASSESSMENT_KEY = 'growpilot.demo.assessment';
 
 function readStoredState(key) {
   try {
@@ -65,6 +69,9 @@ export default function App() {
     user: readStoredState(USER_KEY),
     business: readStoredState(BUSINESS_KEY),
   }));
+  const [onboardingState, setOnboardingState] = useState(() => readStoredState(ONBOARDING_KEY) || {});
+  const [assessmentState, setAssessmentState] = useState(() => readStoredState(ASSESSMENT_KEY) || {});
+  const hasProfileAssessment = Boolean(session.user?.email && assessmentState[session.user.email]);
 
   const handleLogin = (user) => {
     const nextUser = {
@@ -75,6 +82,8 @@ export default function App() {
     saveStoredState(USER_KEY, nextUser);
     setSession(prev => ({ ...prev, user: nextUser }));
     addToast('Dummy login successful', 'success');
+
+    return assessmentState[nextUser.email] ? '/businesses' : '/first-login-assessment';
   };
 
   const handleLogout = () => {
@@ -90,13 +99,54 @@ export default function App() {
     addToast(`Opened ${business.label}`, 'success');
   };
 
+  const handleCompleteOnboarding = (slug, payload) => {
+    const nextState = {
+      ...onboardingState,
+      [slug]: {
+        completedAt: new Date().toISOString(),
+        ...payload,
+      },
+    };
+
+    setOnboardingState(nextState);
+    saveStoredState(ONBOARDING_KEY, nextState);
+    addToast('Onboarding completed. Welcome to your dashboard.', 'success');
+  };
+
+  const handleCompleteAssessment = (email, payload) => {
+    const nextState = {
+      ...assessmentState,
+      [email]: {
+        completedAt: new Date().toISOString(),
+        ...payload,
+      },
+    };
+
+    setAssessmentState(nextState);
+    saveStoredState(ASSESSMENT_KEY, nextState);
+    addToast('Business foundation assessment completed.', 'success');
+  };
+
   const getSelectedBusinessPath = (section = 'dashboard') => {
+    if (!hasProfileAssessment) {
+      return '/first-login-assessment';
+    }
+
     const slug = session.business?.slug;
     return slug ? `/${slug}/${section}` : '/businesses';
   };
 
   const renderBusinessRoute = (profile, section) => {
     const Page = sectionRoutes[section];
+
+    if (!hasProfileAssessment) {
+      return <Navigate to="/first-login-assessment" replace />;
+    }
+
+    if (!onboardingState?.[profile.slug]) {
+      return <Navigate to={`/${profile.slug}/onboarding`} replace />;
+    }
+
     return (
       <AppShell onToast={addToast} business={profile}>
         <Page business={profile} onToast={addToast} />
@@ -113,9 +163,27 @@ export default function App() {
           path="/login"
           element={
             session.user ? (
-              <Navigate to="/businesses" replace />
+              <Navigate to={hasProfileAssessment ? '/businesses' : '/first-login-assessment'} replace />
             ) : (
               <LoginPage onLogin={handleLogin} onToast={addToast} />
+            )
+          }
+        />
+        <Route
+          path="/first-login-assessment"
+          element={
+            session.user ? (
+              hasProfileAssessment ? (
+                <Navigate to="/businesses" replace />
+              ) : (
+                <FirstLoginAssessmentPage
+                  user={session.user}
+                  onComplete={handleCompleteAssessment}
+                  onToast={addToast}
+                />
+              )
+            ) : (
+              <Navigate to="/login" replace />
             )
           }
         />
@@ -123,13 +191,17 @@ export default function App() {
           path="/businesses"
           element={
             session.user ? (
-              <BusinessSelectionPage
-                user={session.user}
-                selectedBusiness={session.business}
-                onSelectBusiness={handleSelectBusiness}
-                onLogout={handleLogout}
-                onToast={addToast}
-              />
+              hasProfileAssessment ? (
+                <BusinessSelectionPage
+                  user={session.user}
+                  selectedBusiness={session.business}
+                  onSelectBusiness={handleSelectBusiness}
+                  onLogout={handleLogout}
+                  onToast={addToast}
+                />
+              ) : (
+                <Navigate to="/first-login-assessment" replace />
+              )
             ) : (
               <Navigate to="/login" replace />
             )
@@ -137,15 +209,33 @@ export default function App() {
         />
         <Route
           path="/bakery"
-          element={<Navigate to="/bakery/dashboard" replace />}
+          element={<Navigate to="/bakery/onboarding" replace />}
         />
         <Route
           path="/grocery"
-          element={<Navigate to="/grocery/dashboard" replace />}
+          element={<Navigate to="/grocery/onboarding" replace />}
         />
 
         {businessProfiles.map((profile) => (
           <Fragment key={profile.slug}>
+            <Route
+              path={`/${profile.slug}/onboarding`}
+              element={
+                session.user ? (
+                  onboardingState?.[profile.slug] ? (
+                    <Navigate to={`/${profile.slug}/dashboard`} replace />
+                  ) : (
+                    <OnboardingPage
+                      business={profile}
+                      onComplete={handleCompleteOnboarding}
+                      onToast={addToast}
+                    />
+                  )
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
             <Route
               path={`/${profile.slug}/dashboard`}
               element={session.user ? renderBusinessRoute(profile, 'dashboard') : <Navigate to="/login" replace />}

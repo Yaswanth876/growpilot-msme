@@ -23,8 +23,8 @@ export default function LoginPage({ onLogin, onToast }) {
       return;
     }
 
-    onLogin?.({ email, name: email.split('@')[0] });
-    navigate('/businesses');
+    const nextPath = onLogin?.({ email, name: email.split('@')[0] }) || '/businesses';
+    navigate(nextPath);
   };
 
   return (
