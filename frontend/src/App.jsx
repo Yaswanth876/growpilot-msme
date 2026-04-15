@@ -14,6 +14,7 @@ import InventoryPage from './pages/InventoryPage';
 import MarketingPage from './pages/MarketingPage';
 import ExpensesPage from './pages/ExpensesPage';
 import ReportsPage from './pages/ReportsPage';
+import SuppliersPage from './pages/SuppliersPage';
 
 const USER_KEY = 'growpilot.demo.user';
 const BUSINESS_KEY = 'growpilot.demo.business';
@@ -42,6 +43,7 @@ const sectionRoutes = {
   marketing: MarketingPage,
   expenses: ExpensesPage,
   reports: ReportsPage,
+  suppliers: SuppliersPage,
 };
 
 const businessProfiles = [bakeryProfile, groceryProfile];
@@ -168,6 +170,10 @@ export default function App() {
               path={`/${profile.slug}/reports`}
               element={session.user ? renderBusinessRoute(profile, 'reports') : <Navigate to="/login" replace />}
             />
+            <Route
+              path={`/${profile.slug}/suppliers`}
+              element={session.user ? renderBusinessRoute(profile, 'suppliers') : <Navigate to="/login" replace />}
+            />
           </Fragment>
         ))}
 
@@ -178,48 +184,7 @@ export default function App() {
         <Route path="/marketing" element={<Navigate to={getSelectedBusinessPath('marketing')} replace />} />
         <Route path="/expenses" element={<Navigate to={getSelectedBusinessPath('expenses')} replace />} />
         <Route path="/reports" element={<Navigate to={getSelectedBusinessPath('reports')} replace />} />
-
-        {/* App Shell pages */}
-        <Route
-          path="/chatbot"
-          element={
-            <AppShell onToast={addToast}>
-              <ChatbotPage />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/inventory"
-          element={
-            <AppShell onToast={addToast}>
-              <InventoryPage onToast={addToast} />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/marketing"
-          element={
-            <AppShell onToast={addToast}>
-              <MarketingPage onToast={addToast} />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/expenses"
-          element={
-            <AppShell onToast={addToast}>
-              <ExpensesPage />
-            </AppShell>
-          }
-        />
-        <Route
-          path="/reports"
-          element={
-            <AppShell onToast={addToast}>
-              <ReportsPage />
-            </AppShell>
-          }
-        />
+        <Route path="/suppliers" element={<Navigate to={getSelectedBusinessPath('suppliers')} replace />} />
 
         {/* Catch-all → landing */}
         <Route path="*" element={<Navigate to="/" replace />} />

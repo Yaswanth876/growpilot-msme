@@ -55,7 +55,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function DashboardPage({ business }) {
-  const dashboardData = business?.workspace?.dashboard || { kpiData, weeklyData, aiInsights, recentOrders, title: 'Owner Dashboard', subtitle: 'Welcome back, Rajesh! Here\'s your business summary.' };
+  const dashboardData = business?.workspace?.dashboard || { kpiData, weeklyData, aiInsights, recentOrders, supplierInsights: [], supplierSnapshot: [], title: 'Owner Dashboard', subtitle: 'Welcome back, Rajesh! Here\'s your business summary.' };
   const weeklyTotal = dashboardData.weeklyData.reduce((sum, day) => sum + (day.sales || 0), 0);
 
   return (
@@ -168,7 +168,7 @@ export default function DashboardPage({ business }) {
                 </tr>
               </thead>
               <tbody>
-                {recentOrders.map((order, i) => (
+                {dashboardData.recentOrders.map((order, i) => (
                   <tr key={i}>
                     <td><span style={{ fontWeight: 600, color: '#2563EB', fontFamily: 'monospace', fontSize: '0.8rem' }}>{order.id}</span></td>
                     <td style={{ fontWeight: 500 }}>{order.customer}</td>
@@ -182,6 +182,62 @@ export default function DashboardPage({ business }) {
             </table>
           </div>
         </div>
+
+        {/* Supplier Insights */}
+        {(dashboardData.supplierInsights?.length > 0 || dashboardData.supplierSnapshot?.length > 0) && (
+          <div className="dash-row">
+            <div className="dash-insights card">
+              <div className="dash-card-header">
+                <div>
+                  <h2 className="dash-card-title">Supplier Insights</h2>
+                  <p className="dash-card-sub">Delivery reliability and procurement actions</p>
+                </div>
+              </div>
+              <div className="dash-insights-list">
+                {dashboardData.supplierInsights?.map((insight, i) => {
+                  const colors = insightColors[insight.type] || insightColors.info;
+                  return (
+                    <div
+                      key={i}
+                      className="dash-insight-item"
+                      style={{ background: colors.bg, borderColor: colors.border }}
+                    >
+                      <div className="dash-insight-icon" style={{ color: colors.icon }}>
+                        {insightIcons[insight.type] || insightIcons.info}
+                      </div>
+                      <p style={{ fontSize: '0.8125rem', color: colors.text, lineHeight: 1.5 }}>{insight.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="card dash-suppliers">
+              <div className="dash-card-header" style={{ marginBottom: 0 }}>
+                <div>
+                  <h2 className="dash-card-title">Top Suppliers</h2>
+                  <p className="dash-card-sub">Current procurement health</p>
+                </div>
+              </div>
+              <div className="dash-suppliers-list">
+                {dashboardData.supplierSnapshot?.map((supplier) => (
+                  <div className="dash-supplier-item" key={supplier.name}>
+                    <div>
+                      <p className="dash-supplier-name">{supplier.name}</p>
+                      <p className="dash-supplier-meta">{supplier.category} • Last delivery {supplier.lastDelivery}</p>
+                    </div>
+                    <div className="dash-supplier-right">
+                      <span className={`badge ${supplier.reliability >= 90 ? 'badge-success' : supplier.reliability >= 80 ? 'badge-warning' : 'badge-danger'}`}>
+                        {supplier.reliability}%
+                      </span>
+                      <span className="dash-supplier-status">{supplier.status}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

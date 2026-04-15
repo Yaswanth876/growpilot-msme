@@ -287,6 +287,16 @@ export const groceryWorkspace = {
     weeklyData: groceryWeeklyData,
     aiInsights: groceryAiInsights,
     recentOrders: groceryRecentOrders,
+    supplierInsights: [
+      { type: 'warning', text: 'Sweet Mills has delayed 2 deliveries this month. Keep a backup sugar supplier active.' },
+      { type: 'success', text: 'Fortune Traders maintains 96% on-time delivery and stable pricing for oil stock.' },
+      { type: 'info', text: 'Agromax lead time reduced from 3 days to 2 days. Place Friday reorders before noon.' },
+    ],
+    supplierSnapshot: [
+      { name: 'Agromax Pvt Ltd', category: 'Staples', lastDelivery: 'Today', reliability: 92, status: 'Stable' },
+      { name: 'Sweet Mills', category: 'Sugar & Sweeteners', lastDelivery: '2 days ago', reliability: 78, status: 'Watchlist' },
+      { name: 'Fortune Traders', category: 'Oils', lastDelivery: 'Yesterday', reliability: 96, status: 'Preferred' },
+    ],
   },
   chatbot: {
     title: 'AI Customer Assistant',
@@ -321,6 +331,21 @@ export const groceryWorkspace = {
     subtitle: 'AI-powered analytics and sales forecasting',
     reportData: groceryReportData,
   },
+  suppliers: {
+    title: 'Supplier Management',
+    subtitle: 'Track reliability, lead times, and payment terms for all vendors',
+    suppliers: [
+      { id: 'SUP-GR-01', name: 'Agromax Pvt Ltd', category: 'Staples', contact: 'Vikram Jain', phone: '+91 98765 22110', location: 'Yeshwanthpur, Bangalore', lastDelivery: '15 Apr', leadTime: '2 days', reliability: 92, paymentTerms: '14 days credit', status: 'active', monthlyValue: '₹1,45,000' },
+      { id: 'SUP-GR-02', name: 'Sweet Mills', category: 'Sugar & Sweeteners', contact: 'Nitin Rao', phone: '+91 98450 33012', location: 'Tumkur', lastDelivery: '13 Apr', leadTime: '3 days', reliability: 78, paymentTerms: 'Advance 50%', status: 'watch', monthlyValue: '₹58,000' },
+      { id: 'SUP-GR-03', name: 'Fortune Traders', category: 'Oils', contact: 'Ayesha Ali', phone: '+91 99861 44552', location: 'Peenya', lastDelivery: '14 Apr', leadTime: '1 day', reliability: 96, paymentTerms: '21 days credit', status: 'preferred', monthlyValue: '₹92,000' },
+      { id: 'SUP-GR-04', name: 'Britannia Dist.', category: 'Snacks', contact: 'Rohan Joseph', phone: '+91 96111 55664', location: 'KR Puram', lastDelivery: '11 Apr', leadTime: '2 days', reliability: 85, paymentTerms: '7 days credit', status: 'active', monthlyValue: '₹74,000' },
+    ],
+    insights: [
+      '1 supplier is on watchlist due to repeated delays.',
+      'Preferred suppliers contribute 54% of purchase value.',
+      'Average lead time improved to 2.0 days this month.',
+    ],
+  },
 };
 
 export const bakeryWorkspace = {
@@ -354,6 +379,16 @@ export const bakeryWorkspace = {
       { id: '#BK-2403', customer: 'Hotel Lotus', items: '40 bread loaves', amount: '₹4,800', status: 'processing', time: '1 hr ago' },
       { id: '#BK-2404', customer: 'Nina Joseph', items: 'Wedding cake, cupcakes', amount: '₹6,200', status: 'delivered', time: '2 hrs ago' },
       { id: '#BK-2405', customer: 'Cafe Nova', items: 'Croissants, donuts', amount: '₹1,420', status: 'cancelled', time: '3 hrs ago' },
+    ],
+    supplierInsights: [
+      { type: 'warning', text: 'Fresh Dairy butter deliveries slipped twice this week. Keep emergency stock buffer of 2 packs.' },
+      { type: 'success', text: 'Royal Mills maintained 95% fill rate for flour with no quality rejection this month.' },
+      { type: 'info', text: 'PackWell can deliver cake boxes in 24 hours for urgent festive orders.' },
+    ],
+    supplierSnapshot: [
+      { name: 'Royal Mills', category: 'Flour', lastDelivery: 'Today', reliability: 95, status: 'Preferred' },
+      { name: 'Fresh Dairy', category: 'Dairy', lastDelivery: 'Yesterday', reliability: 81, status: 'Watchlist' },
+      { name: 'PackWell', category: 'Packaging', lastDelivery: 'Today', reliability: 93, status: 'Stable' },
     ],
   },
   chatbot: {
@@ -460,6 +495,21 @@ Rules:
         { name: 'Cafe Nova', orders: 11, spent: '₹8,200', badge: 'New' },
       ],
     },
+  },
+  suppliers: {
+    title: 'Bakery Suppliers',
+    subtitle: 'Manage ingredient vendors, packaging partners, and lead-time risks',
+    suppliers: [
+      { id: 'SUP-BK-01', name: 'Royal Mills', category: 'Flour', contact: 'Sanjay Mehta', phone: '+91 98801 12090', location: 'Nelamangala', lastDelivery: '15 Apr', leadTime: '1 day', reliability: 95, paymentTerms: '15 days credit', status: 'preferred', monthlyValue: '₹1,12,000' },
+      { id: 'SUP-BK-02', name: 'Fresh Dairy', category: 'Dairy', contact: 'Pooja Nair', phone: '+91 98444 33129', location: 'Hosur', lastDelivery: '14 Apr', leadTime: '2 days', reliability: 81, paymentTerms: 'Advance 30%', status: 'watch', monthlyValue: '₹86,000' },
+      { id: 'SUP-BK-03', name: 'Sweet Mills', category: 'Sweeteners', contact: 'Nitin Rao', phone: '+91 98450 33012', location: 'Tumkur', lastDelivery: '13 Apr', leadTime: '2 days', reliability: 89, paymentTerms: '14 days credit', status: 'active', monthlyValue: '₹52,000' },
+      { id: 'SUP-BK-04', name: 'PackWell', category: 'Packaging', contact: 'Lavanya Das', phone: '+91 99009 55122', location: 'Bommasandra', lastDelivery: '15 Apr', leadTime: '1 day', reliability: 93, paymentTerms: '21 days credit', status: 'active', monthlyValue: '₹44,000' },
+    ],
+    insights: [
+      'Dairy supplier reliability dipped below 85% this week.',
+      'Packaging supplier lead time is the fastest at 1 day.',
+      'Top 2 suppliers cover 68% of monthly procurement value.',
+    ],
   },
 };
 
