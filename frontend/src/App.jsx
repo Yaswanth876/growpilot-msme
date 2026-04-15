@@ -14,6 +14,7 @@ import DashboardPage from './pages/DashboardPage';
 import ChatbotPage from './pages/ChatbotPage';
 import InventoryPage from './pages/InventoryPage';
 import MarketingPage from './pages/MarketingPage';
+import BillingPage from './pages/BillingPage';
 import ExpensesPage from './pages/ExpensesPage';
 import ReportsPage from './pages/ReportsPage';
 import SuppliersPage from './pages/SuppliersPage';
@@ -45,6 +46,7 @@ const sectionRoutes = {
   chatbot: ChatbotPage,
   inventory: InventoryPage,
   marketing: MarketingPage,
+  billing: BillingPage,
   expenses: ExpensesPage,
   reports: ReportsPage,
   suppliers: SuppliersPage,
@@ -253,6 +255,10 @@ export default function App() {
               element={session.user ? renderBusinessRoute(profile, 'marketing') : <Navigate to="/login" replace />}
             />
             <Route
+              path={`/${profile.slug}/billing`}
+              element={session.user ? renderBusinessRoute(profile, 'billing') : <Navigate to="/login" replace />}
+            />
+            <Route
               path={`/${profile.slug}/expenses`}
               element={session.user ? renderBusinessRoute(profile, 'expenses') : <Navigate to="/login" replace />}
             />
@@ -272,6 +278,7 @@ export default function App() {
         <Route path="/chatbot" element={<Navigate to={getSelectedBusinessPath('chatbot')} replace />} />
         <Route path="/inventory" element={<Navigate to={getSelectedBusinessPath('inventory')} replace />} />
         <Route path="/marketing" element={<Navigate to={getSelectedBusinessPath('marketing')} replace />} />
+        <Route path="/billing" element={<Navigate to={getSelectedBusinessPath('billing')} replace />} />
         <Route path="/expenses" element={<Navigate to={getSelectedBusinessPath('expenses')} replace />} />
         <Route path="/reports" element={<Navigate to={getSelectedBusinessPath('reports')} replace />} />
         <Route path="/suppliers" element={<Navigate to={getSelectedBusinessPath('suppliers')} replace />} />
