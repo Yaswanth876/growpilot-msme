@@ -23,14 +23,14 @@ export function useAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const sendChatMessage = useCallback(async (conversationHistory) => {
+  const sendChatMessage = useCallback(async (conversationHistory, options = {}) => {
     setIsLoading(true);
     setError(null);
     try {
       if (!ANTHROPIC_API_KEY) {
         // Use fallback for demo without key
         await new Promise(r => setTimeout(r, 1200));
-        return getFallback();
+        return options.fallback || getFallback();
       }
       const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
@@ -43,7 +43,7 @@ export function useAI() {
         body: JSON.stringify({
           model: "claude-sonnet-4-5",
           max_tokens: 400,
-          system: chatSystemPrompt,
+          system: options.systemPrompt || chatSystemPrompt,
           messages: conversationHistory,
         }),
       });
@@ -53,20 +53,22 @@ export function useAI() {
     } catch (err) {
       setError(err.message);
       await new Promise(r => setTimeout(r, 800));
-      return getFallback();
+      return options.fallback || getFallback();
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  const generateMarketing = useCallback(async (formData) => {
+  const generateMarketing = useCallback(async (formData, options = {}) => {
     setIsLoading(true);
     setError(null);
 
+    const businessName = options.businessName || 'Sharma General Store';
+
     const fallbackContent = {
-      instagram: `🎉 Big savings on ${formData.productName}! Get ${formData.offerPercent}% OFF this ${formData.occasion}. Limited stock available at Sharma General Store! 🛒`,
-      whatsapp: `Namaste! 🙏 Exciting offer from Sharma General Store!\n\n✨ ${formData.offerPercent}% OFF on ${formData.productName}!\n📅 ${formData.occasion} Special\n⏰ Limited time offer!\n\nOrder now: 98765 43210`,
-      facebook: `🎊 Celebrating ${formData.occasion} with amazing offers!\n\n💰 ${formData.offerPercent}% discount on ${formData.productName}\n🏪 Visit Sharma General Store\n📍 MG Road, Bangalore\n📞 Call: 98765 43210`,
+      instagram: `🎉 Big savings on ${formData.productName}! Get ${formData.offerPercent}% OFF this ${formData.occasion}. Limited stock available at ${businessName}! 🛒`,
+      whatsapp: `Namaste! 🙏 Exciting offer from ${businessName}!\n\n✨ ${formData.offerPercent}% OFF on ${formData.productName}!\n📅 ${formData.occasion} Special\n⏰ Limited time offer!\n\nOrder now: 98765 43210`,
+      facebook: `🎊 Celebrating ${formData.occasion} with amazing offers!\n\n💰 ${formData.offerPercent}% discount on ${formData.productName}\n🏪 Visit ${businessName}\n📍 Bangalore\n📞 Call: 98765 43210`,
       hashtags: [`#${formData.occasion?.replace(/\s/g, '')}Sale`, "#SharmaBangalore", "#MSMEIndia", "#LocalStore", "#Deals"],
       callToAction: "Order Now & Save Big! 🛍️",
     };
@@ -76,7 +78,7 @@ export function useAI() {
         await new Promise(r => setTimeout(r, 2000));
         return fallbackContent;
       }
-      const prompt = `Generate promotional marketing content for a small Indian grocery business called "Sharma General Store".
+      const prompt = `Generate promotional marketing content for a small Indian business called "${businessName}".
 
 Product: ${formData.productName}
 Offer: ${formData.offerPercent}% discount

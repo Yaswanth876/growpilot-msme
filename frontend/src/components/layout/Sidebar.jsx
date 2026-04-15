@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Package, Megaphone, BarChart2,
   Settings, ChevronLeft, ChevronRight, TrendingUp, Zap,
@@ -7,23 +7,24 @@ import {
 } from 'lucide-react';
 import './Sidebar.css';
 
-const navItems = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { label: "AI Assistant", icon: Users, path: "/chatbot" },
-  { label: "Inventory", icon: Package, path: "/inventory" },
-  { label: "Marketing AI", icon: Megaphone, path: "/marketing" },
-  { label: "Expenses", icon: DollarSign, path: "/expenses" },
-  { label: "Reports", icon: BarChart2, path: "/reports" },
-];
-
 const bottomItems = [
   { label: "Help", icon: HelpCircle, path: "/help" },
   { label: "Settings", icon: Settings, path: "/settings" },
 ];
 
-export default function Sidebar({ onToast }) {
+export default function Sidebar({ onToast, business }) {
   const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate();
+  const basePath = business?.slug ? `/${business.slug}` : '';
+  const displayName = business?.businessName || 'Sharma General Store';
+
+  const navItems = [
+    { label: "Dashboard", icon: LayoutDashboard, path: `${basePath}/dashboard` },
+    { label: "AI Assistant", icon: Users, path: `${basePath}/chatbot` },
+    { label: "Inventory", icon: Package, path: `${basePath}/inventory` },
+    { label: "Marketing AI", icon: Megaphone, path: `${basePath}/marketing` },
+    { label: "Expenses", icon: DollarSign, path: `${basePath}/expenses` },
+    { label: "Reports", icon: BarChart2, path: `${basePath}/reports` },
+  ];
 
   const handleBottomNav = (e, item) => {
     e.preventDefault();
@@ -58,7 +59,7 @@ export default function Sidebar({ onToast }) {
       {!collapsed && (
         <div className="sidebar__business">
           <div className="sidebar__business-dot" />
-          <span>Sharma General Store</span>
+          <span>{displayName}</span>
         </div>
       )}
 

@@ -5,13 +5,15 @@ import { useAI } from '../hooks/useAI';
 import { initialMessage, quickPrompts } from '../data/mockData';
 import './ChatbotPage.css';
 
-export default function ChatbotPage() {
-  const [messages, setMessages] = useState([initialMessage]);
+export default function ChatbotPage({ business }) {
+  const chatbotData = business?.workspace?.chatbot || { title: 'AI Customer Assistant', subtitle: 'Powered by Claude — answers customer queries 24/7', storeContext: 'Sharma General Store, Bangalore', languages: ['English', 'हिंदी'], channels: ['Web Chat', 'WhatsApp Ready'], stats: { queriesToday: 8, resolved: 6, averageResponse: '1.2s' }, quickPrompts, initialMessage, systemPrompt: null };
+  const [messages, setMessages] = useState([chatbotData.initialMessage]);
   const [history, setHistory] = useState([]);
   const [input, setInput] = useState('');
   const { sendChatMessage, isLoading } = useAI();
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const messageIdRef = useRef(0);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -22,14 +24,17 @@ export default function ChatbotPage() {
     if (!userText || isLoading) return;
     setInput('');
 
-    const userMsg = { id: Date.now(), role: 'user', content: userText, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+    const userMsg = { id: `user-${messageIdRef.current++}`, role: 'user', content: userText, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
     const newHistory = [...history, { role: 'user', content: userText }];
 
     setMessages(prev => [...prev, userMsg]);
     setHistory(newHistory);
 
-    const reply = await sendChatMessage(newHistory);
-    const botMsg = { id: Date.now() + 1, role: 'assistant', content: reply, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+    const reply = await sendChatMessage(newHistory, {
+      systemPrompt: chatbotData.systemPrompt,
+      fallback: chatbotData.initialMessage.content,
+    });
+    const botMsg = { id: `bot-${messageIdRef.current++}`, role: 'assistant', content: reply, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
 
     setHistory(prev => [...prev, { role: 'assistant', content: reply }]);
     setMessages(prev => [...prev, botMsg]);
@@ -44,7 +49,7 @@ export default function ChatbotPage() {
 
   return (
     <div className="page-wrap">
-      <Topbar title="AI Customer Assistant" subtitle="Powered by Claude — answers customer queries 24/7" />
+      <Topbar title={chatbotData.title} subtitle={chatbotData.subtitle} />
       <div className="chat-layout animate-fade-in">
 
         {/* Sidebar Info Panel */}
@@ -65,34 +70,33 @@ export default function ChatbotPage() {
 
           <div className="chat-info-section">
             <p className="chat-info-label">Store Context</p>
-            <p className="chat-info-value">Sharma General Store, Bangalore</p>
+            <p className="chat-info-value">{chatbotData.storeContext}</p>
           </div>
           <div className="chat-info-section">
             <p className="chat-info-label">Languages</p>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              <span className="badge badge-primary">English</span>
-              <span className="badge badge-gray">हिंदी</span>
+              {chatbotData.languages.map((language) => (
+                <span key={language} className={`badge ${language === 'English' ? 'badge-primary' : 'badge-gray'}`}>{language}</span>
+              ))}
             </div>
           </div>
           <div className="chat-info-section">
             <p className="chat-info-label">Channels</p>
             <div className="chat-channels">
-              <div className="chat-channel chat-channel--active">
-                <MessageSquare size={13} />
-                Web Chat
-              </div>
-              <div className="chat-channel">
-                <Zap size={13} />
-                WhatsApp Ready
-              </div>
+              {chatbotData.channels.map((channel, index) => (
+                <div key={channel} className={`chat-channel ${index === 0 ? 'chat-channel--active' : ''}`}>
+                  {index === 0 ? <MessageSquare size={13} /> : <Zap size={13} />}
+                  {channel}
+                </div>
+              ))}
             </div>
           </div>
           <div className="chat-info-section">
             <p className="chat-info-label">Quick Stats</p>
             <div className="chat-stats">
-              <div className="chat-stat"><span>Queries Today</span><strong>8</strong></div>
-              <div className="chat-stat"><span>Resolved</span><strong>6</strong></div>
-              <div className="chat-stat"><span>Avg. Response</span><strong>1.2s</strong></div>
+              <div className="chat-stat"><span>Queries Today</span><strong>{chatbotData.stats.queriesToday}</strong></div>
+              <div className="chat-stat"><span>Resolved</span><strong>{chatbotData.stats.resolved}</strong></div>
+              <div className="chat-stat"><span>Avg. Response</span><strong>{chatbotData.stats.averageResponse}</strong></div>
             </div>
           </div>
 
@@ -100,7 +104,7 @@ export default function ChatbotPage() {
           <div className="chat-info-section">
             <p className="chat-info-label">Try Asking</p>
             <div className="chat-quick-prompts">
-              {quickPrompts.map((p, i) => (
+              {chatbotData.quickPrompts.map((p, i) => (
                 <button key={i} className="chat-quick-btn" onClick={() => handleSend(p)}>
                   {p}
                 </button>

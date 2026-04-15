@@ -40,8 +40,9 @@ function CopyButton({ text, onToast }) {
   );
 }
 
-export default function MarketingPage({ onToast }) {
+export default function MarketingPage({ onToast, business }) {
   const { generateMarketing, isLoading } = useAI();
+  const marketingData = business?.workspace?.marketing || { title: 'AI Marketing Generator', subtitle: 'Generate promotional content for Instagram, WhatsApp & Facebook in seconds', presets: marketingPresets, businessName: 'Sharma General Store' };
   const [form, setForm] = useState({ productName: '', offerPercent: '', occasion: '', platform: 'instagram' });
   const [content, setContent] = useState(null);
 
@@ -50,7 +51,9 @@ export default function MarketingPage({ onToast }) {
       onToast?.('Please fill product name and offer %', 'error');
       return;
     }
-    const result = await generateMarketing(form);
+    const result = await generateMarketing(form, {
+      businessName: marketingData?.businessName || 'Sharma General Store',
+    });
     setContent(result);
   };
 
@@ -62,7 +65,7 @@ export default function MarketingPage({ onToast }) {
 
   return (
     <div className="page-wrap">
-      <Topbar title="AI Marketing Generator" subtitle="Generate promotional content for Instagram, WhatsApp & Facebook in seconds" />
+      <Topbar title={marketingData.title} subtitle={marketingData.subtitle} />
       <div className="mkt-layout animate-fade-in">
 
         {/* Input Panel */}
@@ -71,7 +74,7 @@ export default function MarketingPage({ onToast }) {
           <div className="card mkt-presets-card">
             <p className="mkt-section-label">Quick Presets</p>
             <div className="mkt-presets">
-              {marketingPresets.map((p, i) => (
+              {marketingData.presets.map((p, i) => (
                 <button key={i} className="mkt-preset-btn" onClick={() => loadPreset(p)}>
                   <Zap size={12} /> {p.label}
                 </button>

@@ -10,8 +10,9 @@ const statusConfig = {
   good: { label: 'In Stock', cls: 'badge-success' },
 };
 
-export default function InventoryPage({ onToast }) {
-  const [inventory, setInventory] = useState(initialData);
+export default function InventoryPage({ onToast, business }) {
+  const inventoryPageData = business?.workspace?.inventory || { title: 'Inventory Management', subtitle: 'Track stock levels, get AI alerts, and manage products', inventoryData: initialData };
+  const [inventory, setInventory] = useState(inventoryPageData.inventoryData);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [showModal, setShowModal] = useState(false);
@@ -68,7 +69,7 @@ export default function InventoryPage({ onToast }) {
 
   return (
     <div className="page-wrap">
-      <Topbar title="Inventory Management" subtitle="Track stock levels, get AI alerts, and manage products" />
+      <Topbar title={inventoryPageData.title} subtitle={inventoryPageData.subtitle} />
       <div className="inv-content animate-fade-in">
 
         {/* Alert Banner */}

@@ -54,15 +54,18 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-export default function DashboardPage() {
+export default function DashboardPage({ business }) {
+  const dashboardData = business?.workspace?.dashboard || { kpiData, weeklyData, aiInsights, recentOrders, title: 'Owner Dashboard', subtitle: 'Welcome back, Rajesh! Here\'s your business summary.' };
+  const weeklyTotal = dashboardData.weeklyData.reduce((sum, day) => sum + (day.sales || 0), 0);
+
   return (
     <div className="page-wrap">
-      <Topbar title="Owner Dashboard" subtitle="Welcome back, Rajesh! Here's your business summary." />
+      <Topbar title={dashboardData.title} subtitle={dashboardData.subtitle} />
       <div className="dash-content animate-fade-in">
 
         {/* KPI Cards */}
         <div className="dash-kpis">
-          {kpiData.map((kpi, i) => {
+          {dashboardData.kpiData.map((kpi, i) => {
             const Icon = iconMap[kpi.icon];
             const colors = colorMap[kpi.color];
             return (
@@ -92,11 +95,11 @@ export default function DashboardPage() {
               </div>
               <div className="dash-chart-total">
                 <span>Total</span>
-                <strong>₹82,800</strong>
+                <strong>₹{weeklyTotal.toLocaleString('en-IN')}</strong>
               </div>
             </div>
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={weeklyData} barSize={28}>
+              <BarChart data={dashboardData.weeklyData} barSize={28}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
                 <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9CA3AF' }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#9CA3AF' }} tickFormatter={v => `₹${v/1000}k`} />
@@ -122,7 +125,7 @@ export default function DashboardPage() {
               <button className="btn btn-ghost btn-icon"><RefreshCw size={15} /></button>
             </div>
             <div className="dash-insights-list">
-              {aiInsights.map((insight, i) => {
+              {dashboardData.aiInsights.map((insight, i) => {
                 const colors = insightColors[insight.type];
                 return (
                   <div

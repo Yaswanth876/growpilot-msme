@@ -38,8 +38,8 @@ export default function LandingPage() {
           <a href="#pricing">Pricing</a>
         </div>
         <div className="landing__nav-cta">
-          <button className="btn btn-outline btn-sm" onClick={() => navigate('/dashboard')}>Sign In</button>
-          <button className="btn btn-primary btn-sm" onClick={() => navigate('/dashboard')}>Start Free Trial</button>
+          <button className="btn btn-outline btn-sm" onClick={() => navigate('/login')}>Sign In</button>
+          <button className="btn btn-primary btn-sm" onClick={() => navigate('/login')}>Start Free Trial</button>
         </div>
       </nav>
 
@@ -58,10 +58,10 @@ export default function LandingPage() {
           all from one AI-powered platform built for Indian retailers.
         </p>
         <div className="landing__hero-actions">
-          <button className="btn btn-primary btn-lg" onClick={() => navigate('/dashboard')}>
+          <button className="btn btn-primary btn-lg" onClick={() => navigate('/login')}>
             Start Free Trial <ArrowRight size={18} />
           </button>
-          <button className="btn btn-outline btn-lg" onClick={() => navigate('/dashboard')}>
+          <button className="btn btn-outline btn-lg" onClick={() => navigate('/login')}>
             View Live Demo
           </button>
         </div>
@@ -136,7 +136,7 @@ export default function LandingPage() {
               </div>
               <h3>{f.title}</h3>
               <p>{f.desc}</p>
-              <button className="landing__feature-link" onClick={() => navigate('/dashboard')}>
+              <button className="landing__feature-link" onClick={() => navigate('/login')}>
                 Try it now <ArrowRight size={14} />
               </button>
             </div>
@@ -176,7 +176,7 @@ export default function LandingPage() {
         <div className="landing__cta-content">
           <h2>Ready to grow your business?</h2>
           <p>Join 2,000+ store owners already using GrowPilot AI</p>
-          <button className="btn btn-primary btn-lg" onClick={() => navigate('/dashboard')}>
+          <button className="btn btn-primary btn-lg" onClick={() => navigate('/login')}>
             Get Started Free <ArrowRight size={18} />
           </button>
         </div>

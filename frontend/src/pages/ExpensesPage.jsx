@@ -19,13 +19,14 @@ const CustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) =>
   ) : null;
 };
 
-export default function ExpensesPage() {
-  const { totalExpenses, profit, revenue, breakdown, aiInsight } = expenseData;
+export default function ExpensesPage({ business }) {
+  const financeData = business?.workspace?.expenses || { title: 'Expense & Profit Tracker', subtitle: 'Monthly financial overview with AI cost analysis', expenseData, monthlyData };
+  const { totalExpenses, profit, revenue, breakdown, aiInsight } = financeData.expenseData;
   const margin = ((profit / revenue) * 100).toFixed(0);
 
   return (
     <div className="page-wrap">
-      <Topbar title="Expense & Profit Tracker" subtitle="Monthly financial overview with AI cost analysis" />
+      <Topbar title={financeData.title} subtitle={financeData.subtitle} />
       <div className="exp-content animate-fade-in">
 
         {/* Summary Cards */}
@@ -108,7 +109,7 @@ export default function ExpensesPage() {
           <div className="card exp-chart-card">
             <h3 className="exp-chart-title">Revenue vs Expenses (6 months)</h3>
             <ResponsiveContainer width="100%" height={250}>
-              <AreaChart data={monthlyData}>
+              <AreaChart data={financeData.monthlyData}>
                 <defs>
                   <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#2563EB" stopOpacity={0.15} />

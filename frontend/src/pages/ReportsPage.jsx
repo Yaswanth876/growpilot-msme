@@ -4,12 +4,13 @@ import Topbar from '../components/layout/Topbar';
 import { reportData } from '../data/mockData';
 import './ReportsPage.css';
 
-export default function ReportsPage() {
-  const { bestSelling, returningCustomers, peakOrderTime, salesForecast, categoryBreakdown, topCustomers } = reportData;
+export default function ReportsPage({ business }) {
+  const reportsPageData = business?.workspace?.reports || { title: 'Business Reports', subtitle: 'AI-powered analytics and sales forecasting', reportData };
+  const { bestSelling, returningCustomers, peakOrderTime, salesForecast, categoryBreakdown, topCustomers } = reportsPageData.reportData;
 
   return (
     <div className="page-wrap">
-      <Topbar title="Business Reports" subtitle="AI-powered analytics and sales forecasting" />
+      <Topbar title={reportsPageData.title} subtitle={reportsPageData.subtitle} />
       <div className="rpt-content animate-fade-in">
 
         {/* Key metrics */}
